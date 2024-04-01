@@ -20,11 +20,11 @@ jobs:
           node-version: lts/*
           cache: pnpm
 
-    - name: Install
-      run: pnpm install
+      - name: Install
+        run: pnpm install
 
-    - name: Build
-      run: npm run build
+      - name: Build
+        run: npm run build
 
   lint:
     runs-on: ubuntu-latest
