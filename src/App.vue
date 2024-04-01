@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+const msg = ref('github actions')
 </script>
 
 <template>
   <div>
-    github actions
+   {{ msg }}
   </div>
 </template>
 
