@@ -4,11 +4,14 @@
 
 <template>
   <div class="home">
-    Home
+    <RouterLink :to="{name: 'DrawCanvas'}">签名上图</RouterLink>
+    <RouterLink :to="{name: 'BaseToImage'}">base64转图片</RouterLink>
   </div>
 </template>
 
 
 <style scoped>
-
+a {
+  margin-left: 20px;
+}
 </style>

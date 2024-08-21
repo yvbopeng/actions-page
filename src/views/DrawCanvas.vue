@@ -1,28 +1,22 @@
 <template>
     <div>
         <input type="file" id="imageInput" accept="image/*" @change="onFileChange">
-        <!-- <v-stage :config="configKonva">
-            <v-layer>
-                <v-circle :config="configCircle"></v-circle>
-                <v-image :config="configImage"></v-image>
-                <v-transformer ref="transformer" />
-            </v-layer>
-        </v-stage> -->
+       
         <button @click="saveImage">下载图片</button>
         <button @click="copyBase64" id="copy-base64">复制base64到剪切板</button>
         <div class="stage-area">
-            <v-stage ref="stage" :config="configKonva" @mousedown="handleStageMouseDown" @touchstart="handleStageMouseDown">
-            <v-layer ref="layer">
-                <!-- <v-rect v-for="item in rectangles" :key="item.id" :config="item" /> -->
-                <!-- <v-image :config="configImage"></v-image> -->
-                <v-image :config="configImageBg"></v-image>
-                <v-image :config="singImagConfig"></v-image>
-                <v-transformer ref="transformer" />
-            </v-layer>
-        </v-stage>
+            <v-stage ref="stage" :config="configKonva" @mousedown="handleStageMouseDown"
+                @touchstart="handleStageMouseDown">
+                <v-layer ref="layer">
+                    <v-image :config="configImageBg"></v-image>
+                    <v-image :config="singImagConfig"></v-image>
+                    <v-transformer ref="transformer" />
+                </v-layer>
+            </v-stage>
         </div>
 
         <hr>
+
         <div class="sign-area">
             <button @click="saveSignImage">
                 保存签名
@@ -48,6 +42,7 @@ const configKonva = ref({
 });
 const transformer = ref(null)
 const selectedShapeName = ref('')
+const partScreenWidth = window.innerWidth * 2 / 3
 
 function updateTransformer() {
     // here we need to manually attach or detach Transformer node
@@ -93,14 +88,15 @@ function onFileChange() {
             const imgBgObject = new Image();
             imgBgObject.onload = function () {
                 const canvas = {}
-                canvas.width = window.innerWidth * 2 / 3;
+                // 画布和图片原来尺寸一致
+                canvas.width = imgBgObject.width;
                 canvas.height = canvas.width * imgBgObject.height / imgBgObject.width;
 
 
                 configKonva.value.width = canvas.width;
                 configKonva.value.height = canvas.height;
 
-                
+
                 configImageBg.value.image = imgBgObject;
                 configImageBg.value.width = canvas.width;
                 configImageBg.value.height = canvas.height;
@@ -163,32 +159,6 @@ function handleStageMouseDown(e) {
 }
 
 
-
-
-// const configCircle = ref({
-//     x: 100,
-//     y: 100,
-//     radius: 70,
-//     fill: "red",
-//     stroke: "black",
-//     strokeWidth: 4,
-//     draggable: true
-// });
-
-const rectangles = ref([
-    {
-        rotation: 0,
-        x: 10,
-        y: 10,
-        width: 100,
-        height: 100,
-        scaleX: 1,
-        scaleY: 1,
-        fill: '#38bdf8',
-        name: 'rect1',
-        draggable: true,
-    }
-]);
 const configImage = ref({
     x: 100,
     y: 100,
@@ -208,6 +178,7 @@ imageObj.onload = () => {
 
 
 // 签名
+const signAreaWidthNumber = 658;
 const signOption = reactive({
     isFullScreen: false, // 是否全屏手写 [Boolean] 可选
     isFullCover: false, // 是否全屏模式下覆盖所有的元素 [Boolean]   可选
@@ -216,7 +187,7 @@ const signOption = reactive({
     lastWriteWidth: 2, //下笔的宽度 [Number] 可选
     lineCap: 'round', //线条的边缘类型 [butt]平直的边缘 [round]圆形线帽 [square] 正方形线帽
     lineJoin: 'bevel', //线条交汇时边角的类型  [bevel]创建斜角 [round]创建圆角 [miter]创建尖角。
-    canvasWidth: 450, //canvas宽高 [Number] 可选
+    canvasWidth: signAreaWidthNumber, //canvas宽高 [Number] 可选
     canvasHeight: 370, //高度  [Number] 可选
     isShowBorder: false, //是否显示边框 [可选]
     bgColor: 'transparent', //背景色 [String] 可选
@@ -271,6 +242,8 @@ clipboard.on('success', function (e) {
 
     e.clearSelection();
 });
+
+const singAreaWidth = ref(signAreaWidthNumber + 'px')
 </script>
 
 <style scoped>
@@ -293,13 +266,15 @@ clipboard.on('success', function (e) {
 }
 
 .sign-wrap {
-    width: 450px;
+    width: v-bind(singAreaWidth);
     height: 370px;
     margin-top: 20px;
 }
+
 #copy-base64 {
     margin-left: 20px;
 }
+
 .stage-area {
     width: 100%;
     padding: 20px;
