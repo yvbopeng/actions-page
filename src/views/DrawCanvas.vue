@@ -127,7 +127,7 @@ function saveImage() {
     const stage = transformerNode.getStage();
     const dataURL = stage.toDataURL({ pixelRatio: 3 });
     console.log(dataURL)
-    downloadURI(dataURL, 'stage.png');
+    downloadURI(dataURL, 'signed-image.png');
 }
 
 function handleStageMouseDown(e) {
@@ -221,6 +221,8 @@ function saveSignImage() {
         singImagConfig.image = signImgObject;
         singImagConfig.width = configKonva.value.width / 3;
         singImagConfig.height = singImagConfig.width * signImgObject.height / signImgObject.width;
+        singImagConfig.x = configKonva.value.width / 2 - singImagConfig.width / 2;
+        singImagConfig.y = configKonva.value.height / 2 - singImagConfig.height / 2;
     }
 }
 
