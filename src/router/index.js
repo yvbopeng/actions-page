@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/draw-canvas',
       name: 'DrawCanvas',
       component: () => import('../views/DrawCanvas.vue')  
+    },
+    {
+      path: '/base-to-image',
+      name: 'BaseToImage',
+      component: () => import('../views/BaseToImage.vue')
     }
   ]
 })
