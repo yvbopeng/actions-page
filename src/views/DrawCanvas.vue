@@ -1,9 +1,9 @@
 <template>
     <div>
         <input type="file" id="imageInput" accept="image/*" @change="onFileChange">
-       
+
         <button @click="saveImage">下载图片</button>
-        <button @click="copyBase64" id="copy-base64">复制base64到剪切板</button>
+        <button id="copy-base64">复制base64到剪切板</button>
         <div class="stage-area">
             <v-stage ref="stage" :config="configKonva" @mousedown="handleStageMouseDown"
                 @touchstart="handleStageMouseDown">
@@ -34,6 +34,7 @@ import { ref, reactive } from 'vue'
 import appIcon from '../assets/app_icon.png'
 import SignCanvasPlus from 'sign-canvas-plus'
 import ClipboardJS from 'clipboard'
+import Swal from 'sweetalert2'
 
 
 const configKonva = ref({
@@ -127,10 +128,6 @@ function saveImage() {
     const dataURL = stage.toDataURL({ pixelRatio: 3 });
     console.log(dataURL)
     downloadURI(dataURL, 'stage.png');
-}
-
-function copyBase64() {
-
 }
 
 function handleStageMouseDown(e) {
@@ -236,10 +233,12 @@ const clipboard = new ClipboardJS('#copy-base64', {
     }
 });
 clipboard.on('success', function (e) {
-    console.info('Action:', e.action);
-    console.info('Text:', e.text);
-    console.info('Trigger:', e.trigger);
-
+    Swal.fire({
+        text: '复制成功',
+        timer: 1500,
+        icon: "success",
+        showConfirmButton: false
+    })
     e.clearSelection();
 });
 
